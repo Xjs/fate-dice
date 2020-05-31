@@ -64,12 +64,32 @@ func makeMessageCreateCallback(defaultN int) func(*discordgo.Session, *discordgo
 
 		if strings.HasPrefix(m.Content, "dice") {
 			arg := strings.TrimSpace(strings.TrimPrefix(m.Content, "dice"))
-			n, err := strconv.Atoi(arg)
-			if err != nil {
-				n = defaultN
+
+			words := strings.Split(arg, " ")
+			n := defaultN
+			if numDice := words[0]; len(numDice) >= 3 && numDice[0] == '(' && numDice[len(numDice)-1] == ')' {
+				arg := numDice[1 : len(numDice)-1]
+				num, err := strconv.Atoi(arg)
+				if err != nil {
+					log.Printf("invalid argument to dice(): %s\n", arg)
+					return
+				}
+				n = num
+				words = words[1:]
 			}
+
+			offset := 0
+			if len(words) > 0 && len(words[0]) > 0 {
+				o, err := strconv.Atoi(words[0])
+				if err != nil {
+					log.Printf("invalid offset after dice: %s\n", words[0])
+					return
+				}
+				offset = o
+			}
+
 			resultString, result := fate.Fate(n)
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s, total: %d", resultString, result))
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s, total: %d", resultString, result+offset))
 		}
 	}
 }
