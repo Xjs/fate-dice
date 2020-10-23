@@ -31,5 +31,12 @@ func Fate(n int) (string, int) {
 		resultString += v.label
 		result += v.value
 	}
+
+	if result == n { // critical hit
+		resultString = "🎯 " + resultString
+	} else if result == -n { // critical miss
+		resultString = "💩 " + resultString
+	}
+
 	return resultString, result
 }
