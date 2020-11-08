@@ -88,8 +88,13 @@ func makeMessageCreateCallback(defaultN int) func(*discordgo.Session, *discordgo
 				offset = o
 			}
 
+			var comment string
+			if len(words) > 1 {
+				comment = " " + strings.Join(words[1:], " ")
+			}
+
 			resultString, result := fate.Fate(n)
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s, total: %d", resultString, result+offset))
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s, total: %d%s", resultString, result+offset, comment))
 		}
 	}
 }
