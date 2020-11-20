@@ -98,7 +98,7 @@ func makeMessageCreateCallback(defaultN int) func(*discordgo.Session, *discordgo
 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s, total: %d%s", resultString, result+offset, comment))
 		} else if t, err := dnd.Parse(m.Content); err == nil {
 			dice := m.Content
-			if t.Dice < 10 {
+			if t.Faces == 6 && t.Dice < 10 {
 				dice = t.Emoji()
 			}
 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s: %d", dice, t.Throw()))
