@@ -58,6 +58,14 @@ func (t Throw) Throw() int {
 	return result
 }
 
+func (t Throw) Emoji() string {
+	var result string
+	for i := 0; i < t.Dice; i++ {
+		result += "🎲"
+	}
+	return result
+}
+
 // D is a convenience function that Parses the string and if successful, Throws the dice.
 func D(s string) (int, error) {
 	t, err := Parse(s)
