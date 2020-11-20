@@ -12,6 +12,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
+	"github.com/Xjs/fate-dice/dnd"
 	"github.com/Xjs/fate-dice/fate"
 )
 
@@ -95,6 +96,8 @@ func makeMessageCreateCallback(defaultN int) func(*discordgo.Session, *discordgo
 
 			resultString, result := fate.Fate(n)
 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s, total: %d%s", resultString, result+offset, comment))
+		} else if t, err := dnd.Parse(m.Content); err == nil {
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s: %d", m.Content, t.Throw()))
 		}
 	}
 }
