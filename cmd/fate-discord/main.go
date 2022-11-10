@@ -55,12 +55,18 @@ func init() {
 	fate.Seed()
 }
 
+const debug = true
+
 // makeMessageCreateCallback creates a MessageCreate callback function.
 func makeMessageCreateCallback(defaultN int) func(*discordgo.Session, *discordgo.MessageCreate) {
 	return func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// Ignore all messages created by the bot itself
 		if m.Author.ID == s.State.User.ID {
 			return
+		}
+
+		if debug {
+			log.Printf("Received message %q from %s", m.Message.Content, m.Author.Username)
 		}
 
 		if strings.HasPrefix(m.Content, "dice") {
