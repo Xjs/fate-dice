@@ -34,7 +34,9 @@ func main() {
 	}
 	defer dg.Close()
 
-	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentMessageContent)
+	dg.Identify.Intents = discordgo.MakeIntent(
+		discordgo.IntentMessageContent | discordgo.IntentDirectMessages | discordgo.IntentGuildMessages,
+	)
 
 	callback := makeMessageCreateCallback(defaultN)
 
