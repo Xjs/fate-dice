@@ -34,6 +34,8 @@ func main() {
 	}
 	defer dg.Close()
 
+	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentMessageContent)
+
 	callback := makeMessageCreateCallback(defaultN)
 
 	removeCallback := dg.AddHandler(callback)
