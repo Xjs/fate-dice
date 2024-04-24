@@ -67,8 +67,7 @@ func main() {
 
 		resultString, result := fate.Fate(n)
 		response := fmt.Sprintf("%s, total: %d%s", resultString, result+offset, comment)
-		if err := ctx.Send(response,
-			&telebot.SendOptions{ParseMode: telebot.ModeMarkdownV2}); err != nil {
+		if err := ctx.Send(response); err != nil {
 			return fmt.Errorf("error sending %sv: %w", response, err)
 		}
 

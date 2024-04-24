@@ -2,7 +2,6 @@ package fate
 
 import (
 	"math/rand"
-	"time"
 )
 
 type diceValue struct {
@@ -11,14 +10,9 @@ type diceValue struct {
 }
 
 var fateDiceValues = map[int]diceValue{
-	0: diceValue{"-", -1},
-	1: diceValue{"o", 0},
-	2: diceValue{"+", 1},
-}
-
-// Seed seeds the math/rand random number generator with the current time.
-func Seed() {
-	rand.Seed(time.Now().UnixNano())
+	0: {"-", -1},
+	1: {"o", 0},
+	2: {"+", 1},
 }
 
 // Fate throws n fate dice, returning a result string showing the die faces
