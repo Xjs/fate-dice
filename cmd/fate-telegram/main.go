@@ -17,8 +17,7 @@ func helpFunc(ctx telebot.Context) error {
 	response := `/dice <offset> <comment>: Throw 4 fate dice and add the given offset.
 /dnd <NdM specification>: Throw DnD-style N dice with M faces each (e. g. 2d6 to throw 🎲🎲)
 	`
-	if err := ctx.Send(response,
-		&telebot.SendOptions{ParseMode: telebot.ModeMarkdownV2}); err != nil {
+	if err := ctx.Send(response); err != nil {
 		return fmt.Errorf("error sending %s: %w", response, err)
 	}
 
