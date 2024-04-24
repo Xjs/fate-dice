@@ -13,18 +13,16 @@ import (
 	"gopkg.in/telebot.v3"
 )
 
-func helpFunc(bot *telebot.Bot) func(ctx telebot.Context) error {
-	return func(ctx telebot.Context) error {
-		response := `/dice <offset> <comment>: Throw 4 fate dice and add the given offset.
+func helpFunc(ctx telebot.Context) error {
+	response := `/dice <offset> <comment>: Throw 4 fate dice and add the given offset.
 /dnd <NdM specification>: Throw DnD-style N dice with M faces each (e. g. 2d6 to throw 🎲🎲)
 	`
-		if _, err := bot.Send(ctx.Chat(), response,
-			&telebot.SendOptions{ParseMode: telebot.ModeMarkdown}); err != nil {
-			return fmt.Errorf("error sending %s to %v: %w", response, ctx.Chat(), err)
-		}
-
-		return nil
+	if err := ctx.Send(response,
+		&telebot.SendOptions{ParseMode: telebot.ModeMarkdownV2}); err != nil {
+		return fmt.Errorf("error sending %s: %w", response, err)
 	}
+
+	return nil
 }
 
 func main() {
@@ -50,12 +48,7 @@ func main() {
 	}
 
 	bot.Handle("/dice", func(ctx telebot.Context) error {
-		m := ctx.Message()
-		if m == nil {
-			return nil
-		}
-
-		words := strings.Split(m.Text, " ")[1:]
+		words := ctx.Args()
 		n := defaultN
 
 		offset := 0
@@ -74,26 +67,21 @@ func main() {
 
 		resultString, result := fate.Fate(n)
 		response := fmt.Sprintf("%s, total: %d%s", resultString, result+offset, comment)
-		if _, err := bot.Send(m.Chat, response,
-			&telebot.SendOptions{ParseMode: telebot.ModeMarkdown}); err != nil {
-			return fmt.Errorf("error sending %s to %v: %w", response, m.Chat, err)
+		if err := ctx.Send(response,
+			&telebot.SendOptions{ParseMode: telebot.ModeMarkdownV2}); err != nil {
+			return fmt.Errorf("error sending %sv: %w", response, err)
 		}
 
 		return nil
 	})
 
 	bot.Handle("/dnd", func(ctx telebot.Context) error {
-		m := ctx.Message()
-		if m == nil {
-			return nil
-		}
-
-		text := strings.TrimSpace(m.Text[len("/dnd"):])
+		text := strings.TrimSpace(ctx.Message().Payload)
 
 		if text == "" {
-			if _, err := bot.Send(m.Chat, telebot.Cube,
-				&telebot.SendOptions{ParseMode: telebot.ModeMarkdown}); err != nil {
-				return fmt.Errorf("error sending %v to %v: %w", telebot.Cube, m.Chat, err)
+			if err := ctx.Send(telebot.Cube,
+				&telebot.SendOptions{ParseMode: telebot.ModeMarkdownV2}); err != nil {
+				return fmt.Errorf("error sending %v: %w", telebot.Cube, err)
 			}
 			return nil
 		}
@@ -109,16 +97,16 @@ func main() {
 		}
 
 		response := fmt.Sprintf("%s: %d", dice, t.Throw())
-		if _, err := bot.Send(m.Chat, response,
-			&telebot.SendOptions{ParseMode: telebot.ModeMarkdown}); err != nil {
-			return fmt.Errorf("error sending %s to %v: %w", response, m.Chat, err)
+		if err := ctx.Send(response,
+			&telebot.SendOptions{ParseMode: telebot.ModeMarkdownV2}); err != nil {
+			return fmt.Errorf("error sending %s: %w", response, err)
 		}
 
 		return nil
 	})
 
-	bot.Handle("/help", helpFunc(bot))
-	bot.Handle("/start", helpFunc(bot))
+	bot.Handle("/help", helpFunc)
+	bot.Handle("/start", helpFunc)
 
 	log.Println("Running.")
 	bot.Start()
