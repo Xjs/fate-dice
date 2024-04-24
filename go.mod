@@ -1,17 +1,15 @@
 module github.com/Xjs/fate-dice
 
-go 1.21
+go 1.22
 
 require (
-	github.com/bwmarrin/discordgo v0.27.1
-	gopkg.in/tucnak/telebot.v2 v2.5.0
+	github.com/bwmarrin/discordgo v0.28.1
+	gopkg.in/telebot.v3 v3.2.1
 )
 
 require (
 	github.com/gorilla/websocket v1.5.1 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	golang.org/x/crypto v0.18.0 // indirect
-	golang.org/x/net v0.20.0 // indirect
-	golang.org/x/sys v0.16.0 // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
+	golang.org/x/crypto v0.22.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 )
